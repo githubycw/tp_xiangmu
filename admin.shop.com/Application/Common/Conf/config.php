@@ -29,5 +29,6 @@ return array(
     'SHOW_PAGE_TRACE' => true, //调试模式
     'TMPL_CACHE_ON'   => false, // 是否开启模板编译缓存,设为false则每次都会重新编译
     'PAGE_SIZE'       =>2,
-    'PAGE_THEME'      =>'%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%',
+    'PAGE_THEME'      =>'%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
+//    %HEADER%', '%NOW_PAGE%', '%UP_PAGE%', '%DOWN_PAGE%', '%FIRST%', '%LINK_PAGE%', '%END%', '%TOTAL_ROW%', '%TOTAL_PAGE%
 );

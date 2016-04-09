@@ -40,8 +40,15 @@ class SupplierController extends \Think\Controller{
      */
     public function index(){
         //$supplier_model = D('Supplier');
-        $rows = $this->_model->select();
-        $this->assign('rows',$rows);
+       // $rows = $this->_model->getPageResult();
+//        dump($rows);exit;
+        $cond = array();
+        $keyword = I('get.keyword');
+        if($keyword){
+            $cond['name'] =array('like','%'.$keyword.'%');
+        }
+        
+        $this->assign($this->_model->getPageResult($cond));
         $this->display();
         
     }
@@ -73,21 +80,39 @@ class SupplierController extends \Think\Controller{
         
         if(IS_POST){
            //收集数据
-           if($this->_model->create() === false){
-               $this->error(get_error($this->_model->getError()));
-           }
-           //修改
-           if($this->_model->save() === false){
-               $this->error(get_error($this->_model->getError()));
-           }else{
-               $this->success('修改成功!',U('index'));
-           }
-        }  else {  
-              $row = $this->_model->find($id);
-              
-              $this->assign('row',$row);
-              $this->display('add');
-        }         
+                if($this->_model->create() === false){
+                    $this->error(get_error($this->_model->getError()));
+                }
+                //修改
+                if($this->_model->save() === false){
+                    $this->error(get_error($this->_model->getError()));
+                }else{
+                    $this->success('修改成功!',U('index'));
+                }
+           }  else {  
+                   $row = $this->_model->find($id);
+
+                   $this->assign('row',$row);
+                   $this->display('add');
+           }         
            
+        }
+        
+        /**
+         * 删除数据
+         * 其实只是修改name 和 statues的值 修改之后不显示出来
+         */
+        public function delete($id){
+            //修改的数据
+            $data = array(
+              'status'=>-1,
+              'name'  =>array('exp',"CONCAT(name,'_del')"),
+            );
+            //删除的供货商name后面加上del后缀  setField修改多个字段
+            if($this->_model->where(array('id'=>$id))->setField($data) === false){
+                $this->error(get_error($this->_model->getError()));
+            }  else {
+                $this->success('删除成功!');
+            }
         }
 }
